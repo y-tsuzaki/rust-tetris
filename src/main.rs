@@ -28,49 +28,49 @@ enum TetriminoType {
     J,
 }
 
-const TetriminoBlockI: [[bool; 4]; 4] = [
+const TETRIMINO_BLOCK_I: [[bool; 4]; 4] = [
     [false, false, true, false],
     [false, false, true, false],
     [false, false, true, false],
     [false, false, true, false],
 ];
 
-const TetriminoBlockO: [[bool; 4]; 4] = [
+const TETRIMINO_BLOCK_O: [[bool; 4]; 4] = [
     [true, true, false, false],
     [true, true, false, false],
     [false, false, false, false],
     [false, false, false, false],
 ];
 
-const TetriminoBlockS: [[bool; 4]; 4] = [
+const TETRIMINO_BLOCK_S: [[bool; 4]; 4] = [
     [true, false, false, false],
     [true, true, false, false],
     [false, true, false, false],
     [false, false, false, false],
 ];
 
-const TetriminoBlockZ: [[bool; 4]; 4] = [
+const TETRIMINO_BLOCK_Z: [[bool; 4]; 4] = [
     [false, true, false, false],
     [true, true, false, false],
     [true, false, false, false],
     [false, false, false, false],
 ];
 
-const TetriminoBlockL: [[bool; 4]; 4] = [
+const TETRIMINO_BLOCK_L: [[bool; 4]; 4] = [
     [false, true, false, false],
     [false, true, false, false],
     [false, true, true, false],
     [false, false, false, false],
 ];
 
-const TetriminoBlockT: [[bool; 4]; 4] = [
+const TETRIMINO_BLOCK_T: [[bool; 4]; 4] = [
     [false, true, false, false],
     [true, true, true, false],
     [false, false, false, false],
     [false, false, false, false],
 ];
 
-const TetriminoBlockJ: [[bool; 4]; 4] = [
+const TETRIMINO_BLOCK_J: [[bool; 4]; 4] = [
     [false, true, false, false],
     [false, true, false, false],
     [true, true, false, false],
@@ -84,12 +84,12 @@ type Blocks = [[bool; 4]; 4];
 type Pos = (i16, i16);
 
 struct Tetrimino {
-    mino_type: TetriminoType,
     blocks: Blocks,
     pos: Pos,
     size: u16, //ミノのサイズが3ブロックか4ブロックか
 }
 
+// FIXME: warning: variant is never constructed: `UP` 
 enum Direction4 {
     UP,
     RIGHT,
@@ -207,13 +207,13 @@ impl Tetrimino {
 
     fn new(mino_type: TetriminoType) -> Self {
         let blocks = match mino_type {
-            TetriminoType::I => TetriminoBlockI,
-            TetriminoType::O => TetriminoBlockO,
-            TetriminoType::S => TetriminoBlockS,
-            TetriminoType::Z => TetriminoBlockZ,
-            TetriminoType::L => TetriminoBlockL,
-            TetriminoType::T => TetriminoBlockT,
-            TetriminoType::J => TetriminoBlockJ,
+            TetriminoType::I => TETRIMINO_BLOCK_I,
+            TetriminoType::O => TETRIMINO_BLOCK_O,
+            TetriminoType::S => TETRIMINO_BLOCK_S,
+            TetriminoType::Z => TETRIMINO_BLOCK_Z,
+            TetriminoType::L => TETRIMINO_BLOCK_L,
+            TetriminoType::T => TETRIMINO_BLOCK_T,
+            TetriminoType::J => TETRIMINO_BLOCK_J,
         };
         let size = match mino_type {
             TetriminoType::I => 4,
@@ -228,7 +228,6 @@ impl Tetrimino {
         let pos = ((10 / 2 - size / 2) as i16, 0 as i16);
 
         Tetrimino {
-            mino_type,
             blocks,
             pos,
             size,
@@ -265,13 +264,9 @@ impl Stage {
     const TOP_BUFFER: u16 = 5;
 
     fn check_game_over() -> bool {
+        // TODO
         false
     }
-
-    fn get_line_complete() -> Vec<i32> {
-        vec![]
-    }
-
     fn has_filled_line(&self) -> bool {
         let result = &self.detect_filled_line();
         result.is_some()
@@ -506,8 +501,6 @@ fn init(terminal: &mut Terminal) {
 
     terminal.flush();
 }
-
-fn main_loop(terminal: &mut Terminal) {}
 
 fn render_wall(terminal: &mut Terminal) {
     for y in 0..(Stage::HEIGHT + 1) {
